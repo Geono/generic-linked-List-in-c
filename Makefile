@@ -11,7 +11,7 @@ OBJS		= $(SRCS:.c=.o)
 
 CFLAGS		= $(INCLUDEDIRS) -o -W -Wall -O2
 LDFLAGS		= $(LIVDIRS)
-LIBS		= -lm    
+LIBS		= 
 
 #---------------------------------------------------------------------
 #

@@ -1,30 +1,46 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "list.h"
 
-//static inline struct fault_node *list_put( struct fault_list *head, fault_comm_container* input ){
-//	struct fault_node *new_node = calloc( 1, sizeof( struct fault_node ) );
-//	new_node->time 			= input->time;
-//	new_node->id			= input->id;
-//	new_node->fault_from 	= input->fault_from;
-//	new_node->fault_type 	= input->fault_type;
-//	LIST_INSERT_HEAD( head, new_node, list );
-//	return new_node;
-//}
-//
-LIST_HEAD(sample_list, sample_node); 
-LIST_HEAD(sample2_list, sample2_node); 
-
+LIST_HEAD( sample_list, sample_node );
 struct sample_node{
 	int	data;
 	LIST_ENTRY(sample_node) list;
 };
 
-struct sample2_node{
-	int	rack_num;
-	LIST_ENTRY(sample2_node) list;
-	LIST_HEAD(sample3_list, sample2_node) 	head; 
-};
+static inline struct sample_node *list_put( struct sample_list *head, int input ){
+
+	struct sample_node *new_node = calloc( 1, sizeof( struct sample_node ) );
+	new_node->data = input;
+	LIST_INSERT_HEAD( head, new_node, list );
+	return new_node;
+}
 
 int main(void){
+	struct sample_list head;
+	struct sample_node *result_node;
+	LIST_INIT( &head );
+
+	list_put( &head, 1 );
+	list_put( &head, 2 );
+	list_put( &head, 3 );
+	list_put( &head, 4 );
+	list_put( &head, 5 );
+	list_put( &head, 6 );
+
+	LIST_PRINT( &head, struct sample_node, list );
+
+	LIST_SORT( &head, struct sample_node, list, data );
+	
+	LIST_PRINT( &head, struct sample_node, list );
+
+	LIST_EXISTS( &head, struct sample_node, list, data, 3, result_node );
+	if( result_node )
+		printf( " 3 exists \n" );
+
+	LIST_EXISTS( &head, struct sample_node, list, data, 7, result_node );
+	if( result_node )
+		printf( " 7 exists \n" );
+
 	return 0;
 }
