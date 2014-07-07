@@ -22,8 +22,12 @@
  * data_name	: The name of the data for which the list gets sorted
  */
 
+
+#include <sys/queue.h>
+
+#define __CMP_FOR_LIST_SORT( a, b, data_name ) ( (a)->data_name - (b)->data_name )
 /*
- * This file is copyright 2001 Simon Tatham.
+ * This function is copyright 2001 Simon Tatham.
  * 
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -46,22 +50,18 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
-#include <sys/queue.h>
-
-#define __CMP_FOR_LIST_SORT( a, b, data_name ) ( (a)->data_name - (b)->data_name )
-#define __LIST_SORT( head, first_elem, node_type, list_name, data_name ) do{\
-	node_type	*p; \
-	node_type	*q;\
-	node_type	*e;\
-	node_type 	*tail;\
+#define __LIST_SORT( listelm, first_elem, elem_type, field, data_name ) do{\
+	elem_type	*p; \
+	elem_type	*q;\
+	elem_type	*e;\
+	elem_type 	*tail;\
 	int			insize; \
 	int 		nmerges;\
 	int			psize; \
 	int			qsize;\
 	int			i;\
 	if (first_elem == NULL){\
-		(head)->lh_first = NULL;\
+		(listelm)->lh_first = NULL;\
 	}\
 	else{\
 		insize = 1;\
@@ -76,107 +76,105 @@
 				psize = 0;\
 				for (i = 0; i < insize; i++) {\
 					psize++;\
-					q = q->list_name.le_next;\
+					q = q->field.le_next;\
 					if (!q) break;\
 				}\
 				qsize = insize;\
 				while (psize > 0 || (qsize > 0 && q)) {\
 					if (psize == 0) {\
-						e = q; q = q->list_name.le_next; qsize--;\
+						e = q; q = q->field.le_next; qsize--;\
 					} else if (qsize == 0 || !q) {\
-						e = p; p = p->list_name.le_next; psize--;\
+						e = p; p = p->field.le_next; psize--;\
 					} else if (__CMP_FOR_LIST_SORT( p, q, data_name ) <= 0) {\
-						e = p; p = p->list_name.le_next; psize--;\
+						e = p; p = p->field.le_next; psize--;\
 					} else {\
-						e = q; q = q->list_name.le_next; qsize--;\
+						e = q; q = q->field.le_next; qsize--;\
 					}\
 					if (tail) {\
-						tail->list_name.le_next = e;\
+						tail->field.le_next = e;\
 					} else {\
 						first_elem = e;\
 					}\
-					e->list_name.le_prev = &tail->list_name.le_next;\
+					e->field.le_prev = &tail->field.le_next;\
 					tail = e;\
 				}\
 				p = q;\
 			}\
-			tail->list_name.le_next = NULL;\
+			tail->field.le_next = NULL;\
 			if (nmerges <= 1){\
-				(head)->lh_first = first_elem;\
+				(listelm)->lh_first = first_elem;\
 				break;\
 			}\
 			insize *= 2;\
 		}\
 	}\
 } while(0)
-#define LIST_SORT( head, node_type, list_name, data_name )\
-	__LIST_SORT( head, (head)->lh_first, node_type, list_name, data_name )
+#define LIST_SORT( listelm, entry_type, field, data_name )\
+	__LIST_SORT( listelm, (listelm)->lh_first, entry_type, field, data_name )
 
 
 /*
  * Generic list deletion
- * head			: List
- * node_type	: The type of the list node
- * target		: Target node to be deleted
- * list_name	: The name of the list element
+ * listelm			: List
+ * elem				: Target node to be deleted
+ * field			: The name of the list element
  */
-#define LIST_DEL( head, target, list_name ){\
-	if( (head)->lh_first == target )\
-		(head)->lh_first = (head)->lh_first->list_name.le_next;\
-	LIST_REMOVE( target, list_name );\
-	free( target );\
+#define LIST_DEL( listelm, elem, field ){\
+	if( (listelm)->lh_first == elem )\
+		(listelm)->lh_first = (listelm)->lh_first->field.le_next;\
+	LIST_REMOVE( elem, field );\
+	free( elem );\
 }
 
 /*
  * Generic list clear (delete every node)
- * head					: List
- * list_node_type_name	: The name of the type of the list node
- * list_name			: The name of the list element of the list node
+ * listelm			: List
+ * entry_type		: The name of the type of the list node
+ * field			: The name of the list element of the list node
  */
-#define LIST_CLEAR( head, list_node_type_name, list_name ){\
-	list_node_type_name *arrow;\
-	list_node_type_name *next;\
-	if( LIST_EMPTY(head) )\
+#define LIST_CLEAR( listelm, entry_type, field ){\
+	entry_type *arrow;\
+	entry_type *next;\
+	if( LIST_EMPTY(listelm) )\
 		return;\
-	arrow = (head)->lh_first;\
+	arrow = (listelm)->lh_first;\
 	while( arrow ){\
-		next = arrow->list_name.le_next;\
-		LIST_DEL( head, arrow, list_name );\
+		next = arrow->field.le_next;\
+		LIST_DEL( listelm, arrow, field );\
 		arrow = next;\
 	}\
 }
 
 /*
  * Generic list search
- * head					: List
- * list_node_type_name	: The name of the type of the list node
- * list_name			: The name of the list element of the list node
+ * listelm			: List
+ * entry_type		: The name of the type of the list node
+ * field			: The name of the list element of the list node
  */
-#define LIST_EXISTS( head, node_type, list_name, data_name, search_for, result_node ){\
-	node_type *arrow;\
+#define LIST_EXISTS( listelm, entry_type, field, data_name, search_for, result_node ){\
+	entry_type *arrow;\
 	result_node = NULL;\
-	if( ! LIST_EMPTY( head ) ){\
-		LIST_FOREACH( arrow, head, list_name ){\
+	if( ! LIST_EMPTY( listelm ) ){\
+		LIST_FOREACH( arrow, listelm, field ){\
 			if( arrow->data_name == search_for )\
 				result_node = arrow;\
 		}\
 	}\
 }
 
-#define LIST_PRINT( head, node_type, list_name ){\
-	node_type *arrow;\
-	if( LIST_EMPTY(head) ){\
+#define LIST_PRINT( listelm, entry_type, field, data_name ){\
+	entry_type *arrow;\
+	if( LIST_EMPTY(listelm) ){\
 		printf(" - List is empty - \n");\
 	}\
 	else{\
-		LIST_FOREACH( arrow, head, list ){\
-			if( arrow->list_name.le_next == NULL )\
-				printf( "[%d]", arrow->data );\
+		LIST_FOREACH( arrow, listelm, list ){\
+			if( arrow->field.le_next == NULL )\
+				printf( "[%d]", arrow->data_name );\
 			else\
-				printf( "[%d]<->", arrow->data );\
+				printf( "[%d]<->", arrow->data_name );\
 		}\
 	}\
 	printf("\n");\
 }
-
 
