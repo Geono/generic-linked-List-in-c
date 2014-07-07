@@ -9,7 +9,7 @@ DIR_LIB         = ./
 # Directory included
 OBJS		= $(SRCS:.c=.o)
 
-CFLAGS		= $(INCLUDEDIRS) -o -W -Wall -O2
+CFLAGS		= $(INCLUDEDIRS) -o -W -Wall -O2 -g
 LDFLAGS		= $(LIVDIRS)
 LIBS		= 
 

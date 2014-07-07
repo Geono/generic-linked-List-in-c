@@ -95,7 +95,7 @@
 					} else {\
 						first_elem = e;\
 					}\
-					e->list_name.le_prev = &tail;\
+					e->list_name.le_prev = &tail->list_name.le_next;\
 					tail = e;\
 				}\
 				p = q;\
@@ -112,6 +112,7 @@
 #define LIST_SORT( head, node_type, list_name, data_name )\
 	__LIST_SORT( head, (head)->lh_first, node_type, list_name, data_name )
 
+
 /*
  * Generic list deletion
  * head			: List
@@ -122,7 +123,7 @@
 #define LIST_DEL( head, target, list_name ){\
 	if( (head)->lh_first == target )\
 		(head)->lh_first = (head)->lh_first->list_name.le_next;\
-	LIST_REMOVE( target, list_name ); \
+	LIST_REMOVE( target, list_name );\
 	free( target );\
 }
 

@@ -30,6 +30,13 @@ int main(void){
 
 	LIST_PRINT( &head, struct sample_node, list );
 
+	LIST_EXISTS( &head, struct sample_node, list, data, 3, result_node );
+	if( result_node ){
+		printf( " 3 exists \n" );
+		LIST_DEL( &head, result_node, list );
+		LIST_PRINT( &head, struct sample_node, list );
+	}
+
 	LIST_SORT( &head, struct sample_node, list, data );
 	
 	LIST_PRINT( &head, struct sample_node, list );
@@ -38,9 +45,9 @@ int main(void){
 	if( result_node )
 		printf( " 7 exists \n" );
 
-	LIST_EXISTS( &head, struct sample_node, list, data, 3, result_node );
+	LIST_EXISTS( &head, struct sample_node, list, data, 4, result_node );
 	if( result_node ){
-		printf( " 3 exists \n" );
+		printf( " 4 exists \n" );
 		LIST_DEL( &head, result_node, list );
 		LIST_PRINT( &head, struct sample_node, list );
 	}
