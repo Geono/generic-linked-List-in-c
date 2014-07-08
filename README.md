@@ -1,4 +1,4 @@
-Generic linked list in C language
+Generic linked list using sys/queue.h macros
 ===================
 
 A generic linked list using "sys/queue.h" macros.
