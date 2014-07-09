@@ -6,7 +6,7 @@ We often use the macro of sys/queue.h, but it is not convenient to be used as it
 There are some useful macros implemented here:
 
 
-	Generic singly linked list using sys/queue.h
+	Generic singly linked list macros using sys/queue.h
 	
 			
 	  LIST_DEL	( listelm, elem, field )
@@ -32,12 +32,12 @@ There are some useful macros implemented here:
 			@ entry_type		:  the type of the entry structure
 			@ field			:  the name of the list entry
 			@ cmp_func		:  the name of the compare function to be used in sort
-					: 		
+						: 		
 						:  int cmp_func( entry_type *a, entry_type *b )
 						:  The comparison function must return a negative value if
-					:  @a should sort before @b, and a positive value if @a should sort
-					:  after @b. If @a and @b are equivalent, and their original
-					:  relative ordering is to be preserved, @cmp_func must return 0.
+						:  @a should sort before @b, and a positive value if @a should sort
+						:  after @b. If @a and @b are equivalent, and their original
+						:  relative ordering is to be preserved, @cmp_func must return 0.
 			
 			
 	  LIST_EXISTS( listelm, entry_type, field, data_name, search_for, result_entry )
@@ -58,7 +58,7 @@ There are some useful macros implemented here:
 			@ entry_type		:  the type of the entry structure
 			@ field			:  the name of the list entry
 			@ print_func		:  the name of the print function to be used 
-					: 		
+						: 		
 						:  void print_func( entry_type *a )
 						:  The print function should print the notable element in the list entry.
 			
