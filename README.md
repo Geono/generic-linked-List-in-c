@@ -13,8 +13,8 @@ There are some useful macros implemented here:
 		
 		- delete an element of the list 		
 			@ listelm		:  list
-			@ elem			:  a target element to be deleted
-			@ field			:  the name of the list entry
+			@ elem		:  a target element to be deleted
+			@ field		:  the name of the list entry
 			
 			
 	  LIST_CLEAR	( listelm, entry_type, field )
@@ -22,7 +22,7 @@ There are some useful macros implemented here:
 		- clear out the whole list elements
 			@ listelm		:  list
 			@ entry_type		:  the type of the entry structure
-			@ field			:  the name of the list entry
+			@ field		:  the name of the list entry
 			
 			
 	  LIST_SORT	( listelm, entry_type, field, cmp_func )
@@ -30,7 +30,7 @@ There are some useful macros implemented here:
 		- list heap sort by 'data_name'
 			@ listelm		:  list
 			@ entry_type		:  the type of the entry structure
-			@ field			:  the name of the list entry
+			@ field		:  the name of the list entry
 			@ cmp_func		:  the name of the compare function to be used in sort
 						: 		
 						:  int cmp_func( entry_type *a, entry_type *b )
@@ -45,7 +45,7 @@ There are some useful macros implemented here:
 		- find the list element with a certain data and put the element to 'result_entry'
 			@ listelm		:  list
 			@ entry_type		:  the type of the entry structure
-			@ field			:  the name of the list entry
+			@ field		:  the name of the list entry
 			@ data_name		:  the name of the data entry
 			@ search_for		:  the data which is expected to be found
 			@ result_entry		:  &entry structure to use as a result
@@ -56,7 +56,7 @@ There are some useful macros implemented here:
 		- find the list element with a certain data and put the element to 'result_entry'
 			@ listelm		:  list
 			@ entry_type		:  the type of the entry structure
-			@ field			:  the name of the list entry
+			@ field		:  the name of the list entry
 			@ print_func		:  the name of the print function to be used 
 						: 		
 						:  void print_func( entry_type *a )
