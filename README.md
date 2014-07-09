@@ -6,9 +6,8 @@ We often use the macro of sys/queue.h, but it is not convenient to be used as it
 There are some useful macros implemented here:
 
 
-	Generic singly linked list macros using sys/queue.h
+	Generic singly linked list macro functions using sys/queue.h
 	
-			
 	  LIST_DEL	( listelm, elem, field )
 		
 		- delete an element of the list 		
