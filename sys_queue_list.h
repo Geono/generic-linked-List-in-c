@@ -28,28 +28,39 @@
 /*
  * Generic singly linked list using sys/queue.h
  *
- *   LIST_DEL		( listelm, elem, field );
+ * 		
+ *   LIST_DEL		( listelm, elem, field )
  *		
  *		- delete an element of the list 		
  * 		@ listelm			:  list
  * 		@ elem				:  a target element to be deleted
  * 		@ field				:  the name of the list entry
  * 		
- *   LIST_CLEAR		( listelm, entry_type, field );
+ * 		
+ *   LIST_CLEAR		( listelm, entry_type, field )
  * 		
  *		- clear out the whole list elements
  * 		@ listelm			:  list
  * 		@ entry_type		:  the type of the entry structure
  * 		@ field				:  the name of the list entry
  * 		
- *   LIST_SORT		( listelm, entry_type, field, data_name );
+ * 		
+ *   LIST_SORT		( listelm, entry_type, field, cmp_func )
  * 		
  *		- list heap sort by 'data_name'
  * 		@ listelm			:  list
  * 		@ entry_type		:  the type of the entry structure
  * 		@ field				:  the name of the list entry
+ * 		@ cmp_func			:  the name of the compare function to be used in sort
+ *							: 		
+ * 							:  int cmp_func( entry_type *a, entry_type *b )
+ * 							:  The comparison function must return a negative value if
+ *							:  @a should sort before @b, and a positive value if @a should sort
+ *							:  after @b. If @a and @b are equivalent, and their original
+ *							:  relative ordering is to be preserved, @cmp_func must return 0.
  * 		
- *   LIST_EXISTS	( listelm, entry_type, field, data_name, search_for, result_entry );
+ * 		
+ *   LIST_EXISTS	( listelm, entry_type, field, data_name, search_for, result_entry )
  * 		
  *		- find the list element with a certain data and put the element to 'result_entry'
  * 		@ listelm			:  list
@@ -58,6 +69,18 @@
  * 		@ data_name			:  the name of the data entry
  * 		@ search_for		:  the data which is expected to be found
  * 		@ result_entry		:  &entry structure to use as a result
+ * 		
+ * 		
+ *	 LIST_PRINT		( listelm, entry_type, field, print_func )
+ * 		
+ *		- find the list element with a certain data and put the element to 'result_entry'
+ * 		@ listelm			:  list
+ * 		@ entry_type		:  the type of the entry structure
+ * 		@ field				:  the name of the list entry
+ * 		@ print_func		:  the name of the print function to be used 
+ *							: 		
+ * 							:  void print_func( entry_type *a )
+ * 							:  The print function should print the notable element in the list entry.
  * 		
  */
 
@@ -90,9 +113,8 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#define __CMP_FOR_LIST_SORT( a, b, data_name ) ( (a)->data_name - (b)->data_name )
 
-#define __LIST_SORT( listelm, first_elem, elem_type, field, data_name ) do{\
+#define __LIST_SORT( listelm, first_elem, elem_type, field, cmp_for_sort ) do{\
 	elem_type	*p; \
 	elem_type	*q;\
 	elem_type	*e;\
@@ -127,7 +149,7 @@
 						e = q; q = q->field.le_next; qsize--;\
 					} else if (qsize == 0 || !q) {\
 						e = p; p = p->field.le_next; psize--;\
-					} else if (__CMP_FOR_LIST_SORT( p, q, data_name ) <= 0) {\
+					} else if (cmp_for_sort( p, q ) <= 0) {\
 						e = p; p = p->field.le_next; psize--;\
 					} else {\
 						e = q; q = q->field.le_next; qsize--;\
@@ -187,17 +209,23 @@
 	}\
 }
 
-#define LIST_PRINT( listelm, entry_type, field, data_name ){\
+#define LIST_PRINT( listelm, entry_type, field, print_func ){\
 	entry_type *arrow;\
 	if( LIST_EMPTY(listelm) ){\
 		printf(" - List is empty - \n");\
 	}\
 	else{\
 		LIST_FOREACH( arrow, listelm, list ){\
-			if( arrow->field.le_next == NULL )\
-				printf( "[%d]", arrow->data_name );\
-			else\
-				printf( "[%d]<->", arrow->data_name );\
+			if( arrow->field.le_next == NULL ){\
+				printf( "[" );\
+				print_func( arrow );\
+				printf( "]");\
+			}\
+			else{\
+				printf( "[" );\
+				print_func( arrow );\
+				printf( "]<->");\
+			}\
 		}\
 	}\
 	printf("\n");\
