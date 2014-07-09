@@ -12,17 +12,17 @@ There are some useful macros implemented here:
 	  LIST_DEL	( listelm, elem, field )
 		
 		- delete an element of the list 		
-			@ listelm		:  list
-			@ elem			:  a target element to be deleted
-			@ field			:  the name of the list entry
+			@ listelm			:  list
+			@ elem				:  a target element to be deleted
+			@ field				:  the name of the list entry
 			
 			
 	  LIST_CLEAR	( listelm, entry_type, field )
 			
 		- clear out the whole list elements
-			@ listelm		:  list
-			@ entry_type	:  the type of the entry structure
-			@ field			:  the name of the list entry
+			@ listelm			:  list
+			@ entry_type		:  the type of the entry structure
+			@ field				:  the name of the list entry
 			
 			
 	  LIST_SORT	( listelm, entry_type, field, cmp_func )
