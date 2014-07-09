@@ -25,8 +25,8 @@ static inline void smpl_print( struct sample_entry* a ){
 }
 
 int main(void){
-	struct sample_list head;
-	struct sample_entry *result_node;
+	struct sample_list 		head;
+	struct sample_entry 	*result_node;
 
 	LIST_INIT( &head );
 
