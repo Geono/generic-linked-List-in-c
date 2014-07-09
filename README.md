@@ -13,16 +13,16 @@ There are some useful macros implemented here:
 		
 		- delete an element of the list 		
 			@ listelm		:  list
-			@ elem		:  a target element to be deleted
-			@ field		:  the name of the list entry
+			@ elem			:  a target element to be deleted
+			@ field			:  the name of the list entry
 			
 			
 	  LIST_CLEAR	( listelm, entry_type, field )
 			
 		- clear out the whole list elements
 			@ listelm		:  list
-			@ entry_type		:  the type of the entry structure
-			@ field		:  the name of the list entry
+			@ entry_type	:  the type of the entry structure
+			@ field			:  the name of the list entry
 			
 			
 	  LIST_SORT	( listelm, entry_type, field, cmp_func )
@@ -32,12 +32,12 @@ There are some useful macros implemented here:
 			@ entry_type		:  the type of the entry structure
 			@ field				:  the name of the list entry
 			@ cmp_func			:  the name of the compare function to be used in sort
-							: 		
-							:  int cmp_func( entry_type *a, entry_type *b )
-							:  The comparison function must return a negative value if
-							:  @a should sort before @b, and a positive value if @a should sort
-							:  after @b. If @a and @b are equivalent, and their original
-							:  relative ordering is to be preserved, @cmp_func must return 0.
+								: 		
+								:  int cmp_func( entry_type *a, entry_type *b )
+								:  The comparison function must return a negative value if
+								:  @a should sort before @b, and a positive value if @a should sort
+								:  after @b. If @a and @b are equivalent, and their original
+								:  relative ordering is to be preserved, @cmp_func must return 0.
 			
 			
 	  LIST_EXISTS( listelm, entry_type, field, data_name, search_for, result_entry )
@@ -58,9 +58,9 @@ There are some useful macros implemented here:
 			@ entry_type		:  the type of the entry structure
 			@ field				:  the name of the list entry
 			@ print_func		:  the name of the print function to be used 
-							: 		
-							:  void print_func( entry_type *a )
-							:  The print function should print the notable element in the list entry.
+								: 		
+								:  void print_func( entry_type *a )
+								:  The print function should print the notable element in the list entry.
 			
 
 "list_sample.c" presents the sample code how to use theses macros. 
