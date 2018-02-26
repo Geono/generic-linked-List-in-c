@@ -1,7 +1,6 @@
 Generic linked list using sys/queue.h macros
 ===================
 
-This is a generic linked list using "sys/queue.h" macros.
 We often use the macro of sys/queue.h, but it is not convenient to be used as itself. 
 There are some useful macros implemented here:
 
